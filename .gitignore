@@ -1,0 +1,12 @@
+venv/
+venv_lstm/
+__pycache__/
+*.pyc
+.env
+data/*.csv
+data/lstm/*.npy
+outputs/*.mp4
+outputs/*.mp3
+logs/
+.pytest_cache/
+uploads/
