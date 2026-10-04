@@ -57,7 +57,7 @@ A second, independent pipeline recognizes **dynamic (movement-based) gestures** 
 
 ## Project Structure
 
-\`\`\`
+```text
 sign-language-recognition/
 ├── data/                       # Collected landmark data (CSV) per word
 │   └── lstm/                   # Sequence data (.npy) for dynamic gestures
@@ -84,7 +84,7 @@ sign-language-recognition/
 ├── tests/                      # pytest suite
 ├── outputs/                    # Generated video, audio, sentences, logs
 └── requirements.txt
-\`\`\`
+```
 
 ---
 
