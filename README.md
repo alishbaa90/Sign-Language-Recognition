@@ -6,7 +6,7 @@ A real-time system that converts ASL (American Sign Language) hand gestures into
 
 ## Overview
 
-Most sign-language demos stop at "detect a letter." SignSense AI goes further — it recognizes a 20-word ASL vocabulary, strings recognized signs into a natural, grammatically correct sentence using an LLM agent, and speaks that sentence aloud in two languages.
+Most sign-language demos stop at "detect a letter." SignSense AI goes further: it recognizes ASL signs, strings them into a natural, grammatically correct sentence using an LLM agent, and speaks that sentence aloud in two languages.
 
 **Pipeline:**
 
@@ -25,8 +25,8 @@ A second, independent pipeline recognizes **dynamic (movement-based) gestures** 
 
 ## Features
 
-- **20-word ASL vocabulary** — static single-hand gestures, benchmarked across RandomForest, SVM, and a Neural Network, with RandomForest selected for production (best accuracy without requiring feature scaling at inference time)
-- **Dynamic gesture recognition** — a separate LSTM model recognizes 4 movement-based gestures (PLEASE, SORRY, BYE, COME) from 30-frame hand-landmark sequences
+- **Static ASL vocabulary** — single-hand gestures, benchmarked across RandomForest, SVM, and a Neural Network, with RandomForest selected for production (best accuracy without requiring feature scaling at inference time)
+- **Dynamic gesture recognition** — a separate LSTM model recognizes movement-based gestures (PLEASE, SORRY, BYE, COME) from 30-frame hand-landmark sequences
 - **Smart frame sampling** — predictions are gathered over 2-second windows and resolved by majority vote, instead of reacting to every noisy frame
 - **Agentic sentence generation** — a 4-node LangGraph agent turns raw, possibly repeated sign predictions into a natural sentence: deduplicate → build grammatical sentence → make it sound natural → translate to German
 - **Confidence-aware fallback** — if average recognition confidence is low, the agent hedges the generated sentence instead of asserting it outright
@@ -139,39 +139,3 @@ python api.py
 \`\`\`bash
 pytest tests/ -v
 \`\`\`
-
----
-
-## Model Performance
-
-| Model | Accuracy | Notes |
-|---|---|---|
-| RandomForest | 99.97% | **Selected for production** — no feature scaling required at inference |
-| Neural Net (MLP) | 99.97% | Highest offline accuracy, but requires scaled inputs — not used in production to avoid a train/inference mismatch |
-| SVM | 99.53% | Also requires scaled inputs |
-| LSTM (dynamic gestures) | 100% (test set); 100% on live trigger-based inference | Trained on 30-frame sequences for 4 movement-based signs |
-
-**A deliberate engineering decision:** the model comparison script benchmarks all three static classifiers, but production always loads RandomForest — picking "whichever model scored highest offline" silently broke live predictions in an earlier version, because the scaler used for SVM/MLP wasn't persisted for inference. This is documented as a lesson in matching offline model selection to real inference-time constraints.
-
----
-
-## Known Limitations
-
-- The static-gesture pipeline recognizes a single hand per frame; a few ASL signs that are naturally two-handed or two-handed-and-dynamic were adapted into single-hand static equivalents to fit this constraint.
-- The LSTM dynamic-gesture model performs reliably with trigger-based recording (start a fixed-length capture, then predict) rather than continuous streaming inference, since it was trained on clean, isolated gesture sequences.
-- Vocabulary is currently fixed at 20 static + 4 dynamic signs; adding new signs requires collecting new training data and retraining.
-
----
-
-## Possible Future Enhancements
-
-- Containerized deployment (a Dockerfile and `.dockerignore` are included in the repo as a starting point)
-- Two-handed landmark support for a more ASL-accurate vocabulary
-- Larger vocabulary with crowd-sourced training data for better generalization across users
-- Streaming (non-trigger-based) inference for dynamic gestures via a larger, more varied training set
-
----
-
-## License
-
-MIT
