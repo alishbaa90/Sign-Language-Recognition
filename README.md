@@ -90,25 +90,25 @@ sign-language-recognition/
 
 ## Setup
 
-\`\`\`bash
+```bash
 # Clone and enter the project
-git clone <repo-url>
-cd sign-language-recognition
+git clone https://github.com/alishbaa90/Sign-Language-Recognition.git
+cd Sign-Language-Recognition
 
 # Create and activate a virtual environment
 python -m venv venv
-venv\\Scripts\\activate        # Windows
-# source venv/bin/activate   # macOS/Linux
+venv\Scripts\activate        # Windows
+source venv/bin/activate     # macOS/Linux
 
 # Install dependencies
 pip install -r requirements.txt
-\`\`\`
+```
 
 Create a `.env` file in the project root:
 
-\`\`\`
+```env
 GEMINI_API_KEY=your_key_here
-\`\`\`
+```
 
 > **Note on the LSTM module:** TensorFlow does not yet support every Python version. If your main environment can't install TensorFlow, train/run the LSTM pieces (`lstm_data_collector.py`, `train_lstm.py`, `lstm_live_test.py`) from a separate virtual environment on a supported Python version (3.11–3.12). The static-gesture pipeline does not require TensorFlow.
 
@@ -117,25 +117,30 @@ GEMINI_API_KEY=your_key_here
 ## Usage
 
 **Live webcam demo (terminal):**
-\`\`\`bash
+
+```bash
 cd src
 python main_pipeline.py
-\`\`\`
+```
 
 **Live dashboard:**
-\`\`\`bash
+
+```bash
 cd src
 streamlit run streamlit_app.py
-\`\`\`
+```
 
 **REST API:**
-\`\`\`bash
+
+```bash
 cd src
 python api.py
-# Interactive docs: http://localhost:8000/docs
-\`\`\`
+```
+
+Interactive docs: http://localhost:8000/docs
 
 **Run tests:**
-\`\`\`bash
+
+```bash
 pytest tests/ -v
-\`\`\`
+```
